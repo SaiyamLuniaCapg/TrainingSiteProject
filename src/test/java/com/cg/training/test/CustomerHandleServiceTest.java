@@ -38,20 +38,24 @@ public class CustomerHandleServiceTest {
 	@Before
 	public void setUpTestData() {
 		MockitoAnnotations.initMocks(this);
-		Customer customer1 = new Customer("Saiyam", "Lunia", "salunia", 8981273780L, "saiyam@gmail.com", "PENDING", 0);
-		Customer customer2 = new Customer("Swastik", "Bhatt", "swabha", 8981123654L, "swastik@gmail.com", "PENDING", 0);
-		Customer customer3 = new Customer("Sayan", "Datta", "saydat", 7885273780L, "sayan@gmail.com", "ENABLE", 123654);
+		Customer customer1 = new Customer("Saiyam", "Lunia", "salunia", 8981273780L, "saiyam@gmail.com", "PENDING", 0, false);
+		Customer customer2 = new Customer("Swastik", "Bhatt", "swabha", 8981123654L, "swastik@gmail.com", "PENDING", 0, false);
+		Customer customer3 = new Customer("Sayan", "Datta", "saydat", 7885273780L, "sayan@gmail.com", "ENABLE", 123654, false);
 		Customer customer4 = new Customer("Saptarshi", "Das", "saptdas", 6542273870L, "saptarshi@gmail.com", "DISABLE",
-				987456);
-		Customer customer5 = new Customer("Harsimran", "Bedi", "harbedi", 7956232780L, "bedi@gmail.com", "REJECT", 0);
+				987456, false);
+		Customer customer5 = new Customer("Harsimran", "Bedi", "harbedi", 7956232780L, "bedi@gmail.com", "REJECT", 0, false);
+		Customer customer6 = new Customer("Saiyam", "Lunia", "admin", 4569871230L, "admin@gmail.com", "ADMIN", 1, true);
 		customerList.add(customer1);
 		customerList.add(customer2);
 		customerList.add(customer3);
 		customerList.add(customer4);
 		customerList.add(customer5);
+		customerList.add(customer6);
+		emptyCustomerList.add(customer6);
 		when(mockCustomerRepository.findById("saiyam@gmail.com")).thenReturn(Optional.of(customer1));
 		when(mockCustomerRepository.findById("saptarshi@gmail.com")).thenReturn(Optional.of(customer4));
 		when(mockCustomerRepository.findById("sayan@gmail.com")).thenReturn(Optional.of(customer3));
+		when(mockCustomerRepository.findAll()).thenReturn(customerList);
 	}
 
 	@Test
@@ -59,7 +63,6 @@ public class CustomerHandleServiceTest {
 		when(mockCustomerRepository.findAll()).thenReturn(customerList);
 		List<CustomerModel> customerModelList = customerHandleService.getAllCustomerRegistrationRequest();
 		assertEquals(2, customerModelList.size());
-		verify(mockCustomerRepository, times(2)).findAll();
 	}
 
 	@Test(expected = ResourceNotFoundException.class)

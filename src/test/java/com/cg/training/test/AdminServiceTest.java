@@ -49,11 +49,11 @@ public class AdminServiceTest {
 	public void setUpTestData() {
 		MockitoAnnotations.initMocks(this);
 		Customer customer1 = new Customer("Saiyam", "Lunia", "salunia", 8981273780L, "saiyam@gmail.com", "ADMIN",
-				123789);
-		Customer customer2 = new Customer("Swastik", "Bhatt", "swabha", 8981123654L, "swastik@gmail.com", "PENDING", 0);
-		Customer customer3 = new Customer("Sayan", "Datta", "saydat", 7885273780L, "sayan@gmail.com", "ENABLE", 123654);
+				123789, true);
+		Customer customer2 = new Customer("Swastik", "Bhatt", "swabha", 8981123654L, "swastik@gmail.com", "PENDING", 0, false);
+		Customer customer3 = new Customer("Sayan", "Datta", "saydat", 7885273780L, "sayan@gmail.com", "ENABLE", 123654, false);
 		Customer customer4 = new Customer("Saptarshi", "Das", "sapdas", 7856063780L, "saptarshi@gmail.com", "ENABLE",
-				123654);
+				123654, false);
 		customerList.add(customer1);
 		customerList.add(customer2);
 		customerList.add(customer3);
@@ -92,7 +92,7 @@ public class AdminServiceTest {
 	@Test
 	public void testLoginAdmin_forValidCredential_toGetAdmin() throws IncorrectResourceDetailException {
 		Customer expectedCustomer = new Customer("Saiyam", "Lunia", "salunia", 8981273780L, "saiyam@gmail.com", "ADMIN",
-				123789);
+				123789, true);
 		Customer actualCustomer = adminService.loginAdmin("salunia", 123789);
 		assertEquals(expectedCustomer, actualCustomer);
 	}

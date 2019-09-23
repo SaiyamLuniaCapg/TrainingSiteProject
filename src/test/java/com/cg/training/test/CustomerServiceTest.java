@@ -50,14 +50,14 @@ public class CustomerServiceTest {
 	public void setUpTestData() {
 		MockitoAnnotations.initMocks(this);
 		Customer customer1 = new Customer("Saiyam", "Lunia", "salunia", 8981273780L, "saiyam@gmail.com", "ENABLE",
-				123789);
+				123789, true);
 		Customer customer2 = new Customer("Sayan", "Datta", "saydat", 3265273780L, "sayan@gmail.com", "PENDING",
-				876785);
+				876785, false);
 		Customer customer3 = new Customer("Saptarshi", "Das", "saptdas", 7899473780L, "saptarshi@gmail.com", "DISABLE",
-				234523);
+				234523, false);
 		Customer customer4 = new Customer("Swastik", "Bhatt", "sawbhat", 8981212455L, "swastik@gmail.com", "APPROVE",
-				463453);
-		Customer customer5 = new Customer("Shyam", "Kumar", "shymar", 7418529630L, "shyam@gmail.com", "REJECT", 463453);
+				463453, false);
+		Customer customer5 = new Customer("Shyam", "Kumar", "shymar", 7418529630L, "shyam@gmail.com", "REJECT", 463453, false);
 		customerList.add(customer1);
 		customerList.add(customer2);
 		customerList.add(customer3);
@@ -185,7 +185,7 @@ public class CustomerServiceTest {
 	public void testLoginCustomer_forValidCredential_EnableAccount()
 			throws ResourceNotFoundException, ResourceAlreadyExistException, IncorrectResourceDetailException {
 		Customer expectedCustomer = new Customer("Saiyam", "Lunia", "salunia", 8981273780L, "saiyam@gmail.com",
-				"ENABLE", 123789);
+				"ENABLE", 123789, true);
 		Customer actualCustomer = customerService.loginCustomer("saiyam@gmail.com", 123789);
 		assertEquals(expectedCustomer, actualCustomer);
 	}

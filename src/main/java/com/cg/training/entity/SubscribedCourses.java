@@ -6,43 +6,27 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 import io.swagger.annotations.ApiModel;
+import lombok.Data;
+import lombok.NonNull;
 
 @Entity
+@Data
 @ApiModel(description = "All details about the Subscribed Courses by Customer. ")
 public class SubscribedCourses {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int id;
+	@NonNull
 	private String email;
+	@NonNull
 	private String courseName;
 
-	public SubscribedCourses() {}
+	public SubscribedCourses() {
+	}
 
-	public SubscribedCourses(String email, String courseName) {
-		super();
+	public SubscribedCourses(@NonNull String email, @NonNull String courseName) {
 		this.email = email;
 		this.courseName = courseName;
-	}
-
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-	public String getCourseName() {
-		return courseName;
-	}
-
-	public void setCourseName(String courseName) {
-		this.courseName = courseName;
-	}
-
-	@Override
-	public String toString() {
-		return "SubscribedCourses [courseName=" + courseName + "]";
 	}
 
 }

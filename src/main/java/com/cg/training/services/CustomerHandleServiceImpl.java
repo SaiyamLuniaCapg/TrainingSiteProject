@@ -31,6 +31,8 @@ public class CustomerHandleServiceImpl implements CustomerHandleService {
 
 	@Override
 	public List<CustomerModel> getAllCustomerRegistrationRequest() throws ResourceNotFoundException {
+		if (!isValidAdmin())
+			throw new ResourceNotFoundException("Admin need to login first.");
 		List<Customer> customerList = customerRepository.findAll().stream()
 				.filter(customer -> customer.getCustomerAccountStatus().equals("PENDING")).collect(Collectors.toList());
 		List<CustomerModel> customerModelList = new ArrayList<>();
@@ -49,6 +51,8 @@ public class CustomerHandleServiceImpl implements CustomerHandleService {
 	@Override
 	public String actionOnCustomerAccount(String action, String email)
 			throws ResourceNotFoundException, IncorrectResourceDetailException {
+		if (!isValidAdmin())
+			throw new ResourceNotFoundException("Admin need to login first.");
 		Customer customer = customerRepository.findById(email)
 				.orElseThrow(() -> new ResourceNotFoundException("Email Id is invalid."));
 		String actionMessage = null;
@@ -80,6 +84,14 @@ public class CustomerHandleServiceImpl implements CustomerHandleService {
 				throw new IncorrectResourceDetailException("Action is invalid");
 		}
 		return actionMessage;
+	}
+	
+	public boolean isValidAdmin() {
+		Customer admin = customerRepository.findAll().stream()
+				.filter(cust -> cust.getCustomerAccountStatus().equals("ADMIN")).findAny().orElse(null);
+		if (admin.isAccountAccess())
+			return true;
+		return false;
 	}
 
 }

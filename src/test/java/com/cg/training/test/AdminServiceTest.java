@@ -108,7 +108,7 @@ public class AdminServiceTest {
 	}
 
 	@Test
-	public void testAddCourse_forUniqueCoursename_toGetCourseModel() throws ResourceAlreadyExistException {
+	public void testAddCourse_forUniqueCoursename_toGetCourseModel() throws ResourceAlreadyExistException, ResourceNotFoundException {
 		CourseModel expectedCourseModel = new CourseModel("Aws", "Online", 450);
 		CourseModel actualCourseModel = adminService.addCourse(new CourseModel("Aws", "Online", 450));
 		assertEquals(expectedCourseModel, actualCourseModel);
@@ -116,7 +116,7 @@ public class AdminServiceTest {
 	}
 
 	@Test(expected = ResourceAlreadyExistException.class)
-	public void testAddCourse_forDuplicateCoursename_toGetException() throws ResourceAlreadyExistException {
+	public void testAddCourse_forDuplicateCoursename_toGetException() throws ResourceAlreadyExistException, ResourceNotFoundException {
 		adminService.addCourse(new CourseModel("Angular", "Classroom", 450));
 	}
 

@@ -56,7 +56,7 @@ public class AdminCourseServiceController {
 	@PostMapping(value = "/courses", headers = "Accept=application/json", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<CustomResponse> addCourseDetails(
 			@ApiParam(value = "Course object store in database table", required = true) @Valid @RequestBody CourseModel courseModel)
-			throws ResourceAlreadyExistException {
+			throws ResourceAlreadyExistException, ResourceNotFoundException {
 		courseModel = adminService.addCourse(courseModel);
 		return new ResponseEntity<>(
 				new CustomResponse("Course Added Successfully with courseName " + courseModel.getCourseName(), 123),

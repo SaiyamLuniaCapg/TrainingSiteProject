@@ -14,7 +14,7 @@ public interface AdminService {
 
 	public Customer loginAdmin(String userName, double uniqueCode) throws IncorrectResourceDetailException;
 
-	public CourseModel addCourse(CourseModel courseModel) throws ResourceAlreadyExistException;
+	public CourseModel addCourse(CourseModel courseModel) throws ResourceAlreadyExistException, ResourceNotFoundException;
 
 	public List<Courses> getAllCourseDetails() throws ResourceNotFoundException;
 

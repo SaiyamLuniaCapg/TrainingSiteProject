@@ -35,8 +35,8 @@ public class AdminServiceImpl implements AdminService {
 	private static final Logger logger = LoggerFactory.getLogger(TrainingApplication.class);
 	private Courses course;
 
-	public AdminServiceImpl(CourseRepository courseRepository,
-			CustomerRepository customerRepository, SubscribedCoursesRepository subscribedCoursesRepository) {
+	public AdminServiceImpl(CourseRepository courseRepository, CustomerRepository customerRepository,
+			SubscribedCoursesRepository subscribedCoursesRepository) {
 		super();
 		this.courseRepository = courseRepository;
 		this.customerRepository = customerRepository;
@@ -50,13 +50,23 @@ public class AdminServiceImpl implements AdminService {
 				.findAll().stream().filter(cust -> cust.getUserName().equals(userName)
 						&& cust.getUniqueCode() == uniqueCode && cust.getCustomerAccountStatus().equals("ADMIN"))
 				.findAny().orElse(null);
-		if (customer == null)
+		if (customer == null) {
+			customerRepository.findAll().stream().forEach(cust -> {
+				cust.setAccountAccess(false);
+				customerRepository.save(cust);
+			});
 			throw new IncorrectResourceDetailException("Authentication Failed.");
+		}
+		customer.setAccountAccess(true);
+		customerRepository.save(customer);
 		return customer;
 	}
 
 	@Override
-	public CourseModel addCourse(CourseModel courseModel) throws ResourceAlreadyExistException {
+	public CourseModel addCourse(CourseModel courseModel)
+			throws ResourceAlreadyExistException, ResourceNotFoundException {
+		if (!isValidAdmin())
+			throw new ResourceNotFoundException("Admin need to login first.");
 		if (courseRepository.findByCourseName(courseModel.getCourseName()) != null)
 			throw new ResourceAlreadyExistException("Course Name Already Exist");
 		course = new Courses(courseModel.getCourseName(), courseModel.getCoursePlatform(), courseModel.getCoursePrice(),
@@ -68,6 +78,8 @@ public class AdminServiceImpl implements AdminService {
 
 	@Override
 	public List<Courses> getAllCourseDetails() throws ResourceNotFoundException {
+		if (!isValidAdmin())
+			throw new ResourceNotFoundException("Admin need to login first.");
 		List<Courses> courseList = courseRepository.findAll().stream().filter(c -> c.isCourseStatus() == true)
 				.collect(Collectors.toList());
 		if (courseList.isEmpty())
@@ -78,6 +90,8 @@ public class AdminServiceImpl implements AdminService {
 
 	@Override
 	public Courses getCourseDetails(String courseName) throws ResourceNotFoundException {
+		if (!isValidAdmin())
+			throw new ResourceNotFoundException("Admin need to login first.");
 		course = courseRepository.findAll().stream()
 				.filter(courses -> courses.isCourseStatus() && courses.getCourseName().equals(courseName)).findAny()
 				.orElse(null);
@@ -89,6 +103,8 @@ public class AdminServiceImpl implements AdminService {
 
 	@Override
 	public void archieveCourseDetails(String courseName) throws ResourceNotFoundException {
+		if (!isValidAdmin())
+			throw new ResourceNotFoundException("Admin need to login first.");
 		course = getCourseDetails(courseName);
 		course.setCourseStatus(false);
 		courseRepository.save(course);
@@ -96,6 +112,8 @@ public class AdminServiceImpl implements AdminService {
 
 	@Override
 	public Courses updateCourseDetails(CourseModel courseModel) throws ResourceNotFoundException {
+		if (!isValidAdmin())
+			throw new ResourceNotFoundException("Admin need to login first.");
 		Courses previousCourse = getCourseDetails(courseModel.getCourseName());
 		archieveCourseDetails(courseModel.getCourseName());
 		course = new DozerBeanMapper().map(courseModel, Courses.class);
@@ -107,6 +125,8 @@ public class AdminServiceImpl implements AdminService {
 
 	@Override
 	public List<SubscribedCourses> getCustomerCourseSubscription(String id) throws ResourceNotFoundException {
+		if (!isValidAdmin())
+			throw new ResourceNotFoundException("Admin need to login first.");
 		Pattern pattern = Pattern.compile("[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}");
 		Matcher mat = pattern.matcher(id);
 		if (mat.matches()) {
@@ -124,5 +144,13 @@ public class AdminServiceImpl implements AdminService {
 		if (subscribedCourses.isEmpty())
 			throw new ResourceNotFoundException("No Customer has subscribed this course");
 		return subscribedCourses;
+	}
+
+	public boolean isValidAdmin() {
+		Customer admin = customerRepository.findAll().stream()
+				.filter(cust -> cust.getCustomerAccountStatus().equals("ADMIN")).findAny().orElse(null);
+		if (admin.isAccountAccess())
+			return true;
+		return false;
 	}
 }

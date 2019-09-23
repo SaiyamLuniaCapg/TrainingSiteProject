@@ -33,6 +33,7 @@ public class Customer {
 	private String customerAccountStatus;
 	@ApiModelProperty(notes = "Unique Code for Customer's account")
 	private double uniqueCode;
+	private boolean accountAccess;
 
 	public Customer() {
 	}
@@ -56,6 +57,14 @@ public class Customer {
 		this.mobileNo = mobileNo;
 		this.email = email;
 		this.customerAccountStatus = customerAccountStatus;
+	}
+
+	public boolean isAccountAccess() {
+		return accountAccess;
+	}
+
+	public void setAccountAccess(boolean accountAccess) {
+		this.accountAccess = accountAccess;
 	}
 
 	public double getUniqueCode() {

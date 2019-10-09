@@ -5,12 +5,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.dozer.DozerBeanMapper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.cg.training.TrainingApplication;
 import com.cg.training.entity.Courses;
 import com.cg.training.entity.Customer;
 import com.cg.training.entity.SubscribedCourses;
@@ -31,7 +28,6 @@ public class CustomerServiceImpl implements CustomerService {
 	private CourseRepository courseRepository;
 	@Autowired
 	private SubscribedCoursesRepository subscribedCoursesRepository;
-	private static final Logger logger = LoggerFactory.getLogger(TrainingApplication.class);
 
 	public CustomerServiceImpl(CustomerRepository customerRepository, CourseRepository courseRepository,
 			SubscribedCoursesRepository subscribedCoursesRepository) {
@@ -53,15 +49,15 @@ public class CustomerServiceImpl implements CustomerService {
 		return true;
 	}
 
-	public Customer findCustomerProfileEmail(String email) throws ResourceAlreadyExistException {
+	public Customer findCustomerProfileEmail(String email) {
 		return customerRepository.findCustomerByEmail(email);
 	}
 
-	public Customer findCustomerProfileMobile(long mobileNo) throws ResourceAlreadyExistException {
+	public Customer findCustomerProfileMobile(long mobileNo) {
 		return customerRepository.findCustomerByMobile(mobileNo);
 	}
 
-	public Customer findCustomerProfileUserName(String userName) throws ResourceAlreadyExistException {
+	public Customer findCustomerProfileUserName(String userName) {
 		return customerRepository.findUserByCustomerUserName(userName);
 	}
 
@@ -98,9 +94,9 @@ public class CustomerServiceImpl implements CustomerService {
 		Customer customer = customerRepository.findById(email)
 				.orElseThrow(() -> new ResourceNotFoundException("Authentication Failed."));
 		if (customer.getCustomerAccountStatus().equals("ENABLE")) {
-			if (customer.getUniqueCode() == uniqueCode) {
+			if (customer.getUniqueCode() == uniqueCode)
 				return customer;
-			} else
+			else
 				throw new IncorrectResourceDetailException("Authentication Failed.");
 		} else if (customer.getCustomerAccountStatus().equals("PENDING"))
 			throw new IncorrectResourceDetailException("Account is not yet verified.");

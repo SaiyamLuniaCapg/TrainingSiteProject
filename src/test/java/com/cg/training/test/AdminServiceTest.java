@@ -122,7 +122,7 @@ public class AdminServiceTest {
 
 	@Test
 	public void testGetAllCourseDetails_toGetList() throws ResourceNotFoundException {
-		List<Courses> actualCourseList = adminService.getAllCourseDetails();
+		List<CourseModel> actualCourseList = adminService.getAllCourseDetails();	//course changed to courseModel
 		assertEquals(4, actualCourseList.size());
 	}
 

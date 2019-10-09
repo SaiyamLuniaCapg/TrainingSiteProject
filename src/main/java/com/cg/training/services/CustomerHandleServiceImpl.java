@@ -5,12 +5,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.dozer.DozerBeanMapper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.cg.training.TrainingApplication;
 import com.cg.training.entity.Customer;
 import com.cg.training.exceptions.IncorrectResourceDetailException;
 import com.cg.training.exceptions.ResourceNotFoundException;
@@ -22,7 +19,6 @@ public class CustomerHandleServiceImpl implements CustomerHandleService {
 
 	@Autowired
 	private CustomerRepository customerRepository;
-	private static final Logger logger = LoggerFactory.getLogger(TrainingApplication.class);
 
 	public CustomerHandleServiceImpl(CustomerRepository customerRepository) {
 		super();
@@ -40,7 +36,6 @@ public class CustomerHandleServiceImpl implements CustomerHandleService {
 			throw new ResourceNotFoundException("No new Customer Request available right now.");
 		else {
 			for (Customer customer : customerList) {
-//				customerModelList.add(new CustomerModel(customer.getFirstName(), customer.getLastName(),customer.getUserName(), customer.getMobileNo(), customer.getEmail()));
 				customerModelList.add(new DozerBeanMapper().map(customer, CustomerModel.class));
 			}
 		}

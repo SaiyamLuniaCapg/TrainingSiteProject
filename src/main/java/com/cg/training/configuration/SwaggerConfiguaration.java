@@ -27,7 +27,7 @@ public class SwaggerConfiguaration {
     private ApiInfo apiEndPointsInfo() {
         return new ApiInfoBuilder().title("Training Site")
             .description("Training Site REST API")
-            .contact(new Contact("Saiyam Lunia", "https://github.com/SaiyamLuniaCapg/TrainingSite", "saiyam.a.lunia@capgemini.com"))
+            .contact(new Contact("Saiyam Lunia", "https://github.com/SaiyamLuniaCapg/TrainingSiteProject", "saiyam.a.lunia@capgemini.com"))
             .license("Apache Maven Project")
             .licenseUrl("https://maven.apache.org/ref/3.0/license.html")
             .version("1.0.0")

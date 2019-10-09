@@ -1,17 +1,15 @@
 package com.cg.training.services;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import org.dozer.DozerBeanMapper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.cg.training.TrainingApplication;
 import com.cg.training.entity.Courses;
 import com.cg.training.entity.Customer;
 import com.cg.training.entity.SubscribedCourses;
@@ -23,7 +21,10 @@ import com.cg.training.repository.CourseRepository;
 import com.cg.training.repository.CustomerRepository;
 import com.cg.training.repository.SubscribedCoursesRepository;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Component("adminService")
+@Slf4j
 //@Transactional(readOnly = true)
 public class AdminServiceImpl implements AdminService {
 	@Autowired
@@ -32,7 +33,6 @@ public class AdminServiceImpl implements AdminService {
 	private CustomerRepository customerRepository;
 	@Autowired
 	private SubscribedCoursesRepository subscribedCoursesRepository;
-	private static final Logger logger = LoggerFactory.getLogger(TrainingApplication.class);
 	private Courses course;
 
 	public AdminServiceImpl(CourseRepository courseRepository, CustomerRepository customerRepository,
@@ -45,7 +45,7 @@ public class AdminServiceImpl implements AdminService {
 
 	@Override
 	public Customer loginAdmin(String userName, double uniqueCode) throws IncorrectResourceDetailException {
-		logger.info("Admin Login");
+		log.info("Admin Login");
 		Customer customer = customerRepository
 				.findAll().stream().filter(cust -> cust.getUserName().equals(userName)
 						&& cust.getUniqueCode() == uniqueCode && cust.getCustomerAccountStatus().equals("ADMIN"))
@@ -77,15 +77,20 @@ public class AdminServiceImpl implements AdminService {
 	}
 
 	@Override
-	public List<Courses> getAllCourseDetails() throws ResourceNotFoundException {
+	public List<CourseModel> getAllCourseDetails() throws ResourceNotFoundException {
 		if (!isValidAdmin())
 			throw new ResourceNotFoundException("Admin need to login first.");
 		List<Courses> courseList = courseRepository.findAll().stream().filter(c -> c.isCourseStatus() == true)
 				.collect(Collectors.toList());
+		List<CourseModel> courseModels = new ArrayList<>();
 		if (courseList.isEmpty())
 			throw new ResourceNotFoundException("No Course is added right now");
-		else
-			return courseList;
+		else {
+			for (Courses courses : courseList) {
+				courseModels.add(new DozerBeanMapper().map(courses, CourseModel.class));
+			}
+		}
+		return courseModels;
 	}
 
 	@Override

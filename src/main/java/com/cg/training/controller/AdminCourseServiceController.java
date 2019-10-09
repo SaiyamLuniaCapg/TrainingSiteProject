@@ -69,7 +69,7 @@ public class AdminCourseServiceController {
 			@ApiResponse(code = 403, message = "Accessing the resource you were trying to reach is forbidden"),
 			@ApiResponse(code = 404, message = "The resource you were trying to reach is not found") })
 	@GetMapping(value = "/courses", headers = "Accept=application/json", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<List<Courses>> getAllCourseDetails() throws ResourceNotFoundException {
+	public ResponseEntity<List<CourseModel>> getAllCourseDetails() throws ResourceNotFoundException {
 		return new ResponseEntity<>(adminService.getAllCourseDetails(), HttpStatus.OK);
 	}
 

@@ -7,43 +7,34 @@ import javax.persistence.Id;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 
 @Entity
 @Data
+@NoArgsConstructor @RequiredArgsConstructor @AllArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE)
 @ApiModel(description = "All details about the Course. ")
 public class Courses {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private int courseId;
+	int courseId;
 	@NonNull
 	@ApiModelProperty(notes = "Course Name")
-	private String courseName;
+	String courseName;
 	@NonNull
 	@ApiModelProperty(notes = "Course Platform")
-	private String coursePlatform;
+	String coursePlatform;
 	@NonNull
 	@ApiModelProperty(notes = "Course Price")
-	private int coursePrice;
-	private int courseVersion;
-	private boolean courseStatus;
-
-	public Courses() {
-	}
-
-	public Courses(String courseName, String coursePlatform, int coursePrice, int courseVersion, boolean courseStatus) {
-		super();
-		this.courseName = courseName;
-		this.coursePlatform = coursePlatform;
-		this.coursePrice = coursePrice;
-		this.courseVersion = courseVersion;
-		this.courseStatus = courseStatus;
-	}
-
-	public Courses(String courseName, String coursePlatform, int coursePrice) {
-		this.courseName = courseName;
-		this.coursePlatform = coursePlatform;
-		this.coursePrice = coursePrice;
-	}
+	int coursePrice;
+	@NonNull
+	int courseVersion;
+	@NonNull
+	boolean courseStatus;
 }

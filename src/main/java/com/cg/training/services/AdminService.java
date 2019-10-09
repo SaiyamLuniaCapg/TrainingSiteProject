@@ -16,7 +16,7 @@ public interface AdminService {
 
 	public CourseModel addCourse(CourseModel courseModel) throws ResourceAlreadyExistException, ResourceNotFoundException;
 
-	public List<Courses> getAllCourseDetails() throws ResourceNotFoundException;
+	public List<CourseModel> getAllCourseDetails() throws ResourceNotFoundException;
 
 	public Courses getCourseDetails(String courseName) throws ResourceNotFoundException;
 
